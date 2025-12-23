@@ -6,14 +6,11 @@
     <title>Your Digital Copies</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        /* --- GLOBAL RESET & BASE STYLES --- */
-        * {
-            box-sizing: border-box;
-        }
-
+       
+        * { box-sizing: border-box; }
         body {
-            background-color: #F0E6D2; /* kOatMilk */
-            color: #233d00; /* kEspresso */
+            background-color: #F0E6D2;
+            color: #233d00;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             text-align: center;
             margin: 0;
@@ -23,55 +20,43 @@
             align-items: center;
             min-height: 100vh;
         }
-
-        /* --- TYPOGRAPHY --- */
         h1 {
             font-family: 'Pacifico', cursive;
-            font-size: 3rem; /* Desktop size */
+            font-size: 3rem;
             margin-bottom: 5px;
             margin-top: 20px;
             color: #233d00;
             line-height: 1.2;
         }
-
         .handle {
             font-size: 1.1rem;
-            color: #6f4e37; /* Mocha */
+            color: #6f4e37;
             margin-bottom: 30px;
             font-weight: bold;
-            letter-spacing: 0.5px;
             background-color: rgba(255, 255, 255, 0.5);
             padding: 8px 18px;
             border-radius: 50px;
             display: inline-block;
         }
-
-        /* --- LAYOUT CONTAINER --- */
         .container {
             display: flex;
-            flex-wrap: wrap; /* Allows stacking on mobile */
+            flex-wrap: wrap;
             justify-content: center;
             gap: 25px;
             max-width: 900px;
             width: 100%;
         }
-
-        /* --- PHOTO CARDS --- */
         .card {
             background: white;
             padding: 15px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(35, 61, 0, 0.15);
-            
-            /* Default: Side by Side on Desktop */
-            width: 100%; 
-            max-width: 360px; 
-            
+            width: 100%;
+            max-width: 360px;
             border: 2px solid #233d00;
             display: flex;
             flex-direction: column;
         }
-
         .card-title {
             font-weight: bold;
             margin-bottom: 12px;
@@ -80,7 +65,6 @@
             font-size: 0.85rem;
             letter-spacing: 1.5px;
         }
-
         img {
             width: 100%;
             height: auto;
@@ -88,8 +72,6 @@
             margin-bottom: 15px;
             display: block;
         }
-
-        /* --- BUTTONS --- */
         .btn {
             display: block;
             background-color: #233d00;
@@ -99,19 +81,12 @@
             border-radius: 30px;
             font-weight: bold;
             font-size: 1rem;
-            margin-top: auto; /* Pushes button to bottom of flex container */
+            margin-top: auto;
+            cursor: pointer; /* Looks clickable */
             transition: transform 0.2s, background-color 0.2s;
         }
-
-        .btn:active {
-            transform: scale(0.96);
-        }
-
-        .btn-secondary {
-            background-color: #6f4e37; 
-        }
-
-        /* --- FOOTER & UTILS --- */
+        .btn:active { transform: scale(0.96); }
+        .btn-secondary { background-color: #6f4e37; }
         .footer {
             margin-top: 40px;
             font-size: 0.8rem;
@@ -119,49 +94,21 @@
             opacity: 0.8;
             padding-bottom: 20px;
         }
-
         #loader {
             margin-top: 50px;
             font-weight: bold;
             font-size: 1.2rem;
             color: #233d00;
         }
+        .preview-bw { filter: grayscale(100%) contrast(1.2); }
 
-        .preview-bw {
-            filter: grayscale(100%) contrast(1.2);
-        }
-
-        /* --- MOBILE RESPONSIVENESS --- */
-        /* Triggers when screen width is less than 600px (Phones) */
         @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 2.2rem; /* Smaller Title */
-                margin-top: 10px;
-            }
-
-            .handle {
-                font-size: 0.9rem; /* Smaller Handle */
-                margin-bottom: 25px;
-                padding: 6px 14px;
-            }
-
-            .container {
-                gap: 20px;
-            }
-
-            .card {
-                /* On mobile, card takes full width */
-                max-width: 100%; 
-            }
-
-            .btn {
-                padding: 16px; /* Larger tap target for fingers */
-                font-size: 1.1rem;
-            }
+            body { padding: 15px; }
+            h1 { font-size: 2.2rem; margin-top: 10px; }
+            .handle { font-size: 0.9rem; margin-bottom: 25px; padding: 6px 14px; }
+            .container { gap: 20px; }
+            .card { max-width: 100%; }
+            .btn { padding: 16px; font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -177,7 +124,7 @@
         <div class="card">
             <div class="card-title">Original Color</div>
             <img id="imgColor" src="" alt="Color Photo" crossorigin="anonymous">
-            <a id="btnColor" href="#" class="btn" target="_blank" download="photo_color.jpg">
+            <a id="btnColor" onclick="downloadImage(this, 'color')" class="btn">
                 Download Color
             </a>
         </div>
@@ -185,7 +132,7 @@
         <div class="card">
             <div class="card-title">Classic B&W</div>
             <img id="imgBW" src="" class="preview-bw" alt="B&W Photo" crossorigin="anonymous">
-            <a id="btnBW" href="#" class="btn btn-secondary" download="photo_bw.jpg">
+            <a id="btnBW" onclick="downloadImage(this, 'bw')" class="btn btn-secondary">
                 Download B&W
             </a>
         </div>
@@ -206,27 +153,23 @@
         const content = document.getElementById('content');
         
         const imgColor = document.getElementById('imgColor');
-        const btnColor = document.getElementById('btnColor');
-        
         const imgBW = document.getElementById('imgBW');
-        const btnBW = document.getElementById('btnBW');
         
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
+        // Store the B&W Blob URL globally once generated
+        let bwBlobUrl = null;
+
         if (photoUrl) {
-            // 1. Setup Images
             imgColor.src = photoUrl;
             imgBW.src = photoUrl; 
-            btnColor.href = photoUrl; 
 
-            // 2. Logic: Wait for image to load before showing content
             let imagesLoaded = 0;
-            const totalImages = 2;
 
             function checkLoaded() {
                 imagesLoaded++;
-                if (imagesLoaded >= 1) { // Show as soon as at least one is ready
+                if (imagesLoaded >= 1) { 
                     loader.style.display = 'none';
                     content.style.display = 'flex';
                 }
@@ -234,30 +177,71 @@
 
             imgColor.onload = checkLoaded;
 
-            // 3. Process B&W Image
             imgBW.onload = function() {
                 checkLoaded();
+                // Pre-calculate B&W to make download faster
                 try {
                     canvas.width = imgBW.naturalWidth;
                     canvas.height = imgBW.naturalHeight;
-
-                    // Apply Filter
                     ctx.filter = 'grayscale(100%) contrast(120%)';
                     ctx.drawImage(imgBW, 0, 0, canvas.width, canvas.height);
-
-                    // Create Download Link
-                    const bwDataUrl = canvas.toDataURL('image/jpeg', 0.9);
-                    btnBW.href = bwDataUrl;
+                    
+                    // Convert canvas to Blob (better for downloading)
+                    canvas.toBlob(function(blob) {
+                        bwBlobUrl = URL.createObjectURL(blob);
+                    }, 'image/jpeg', 0.95);
                 } catch (e) {
-                    console.log("CORS/Canvas Error: ", e);
-                    // Fallback to original if canvas fails
-                    btnBW.innerText = "Download (Original)";
-                    btnBW.href = photoUrl;
+                    console.log("Canvas error:", e);
                 }
             };
         } else {
             loader.innerText = "Error: Photo not found.";
             loader.style.color = "red";
+        }
+
+        // --- NEW DOWNLOAD FUNCTION ---
+        async function downloadImage(btn, type) {
+            const originalText = btn.innerText;
+            btn.innerText = "Saving..."; // Visual feedback
+            
+            try {
+                let urlToDownload;
+                let filename;
+
+                if (type === 'color') {
+                    // Fetch the original image as a 'Blob' to force download
+                    const response = await fetch(photoUrl);
+                    const blob = await response.blob();
+                    urlToDownload = URL.createObjectURL(blob);
+                    filename = "reseat_photo_color.jpg";
+                } else {
+                    // Use the B&W blob we generated earlier
+                    if (bwBlobUrl) {
+                        urlToDownload = bwBlobUrl;
+                    } else {
+                        // Fallback if blob isn't ready
+                        urlToDownload = photoUrl; 
+                    }
+                    filename = "reseat_photo_bw.jpg";
+                }
+
+                // Create a temporary hidden link to trigger the force download
+                const link = document.createElement("a");
+                link.href = urlToDownload;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+            } catch (error) {
+                console.error("Download failed:", error);
+                // Fallback: Just open the link if the fetch fails
+                window.open(photoUrl, '_blank');
+            } finally {
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                }, 1000);
+            }
         }
     </script>
 
